@@ -1,75 +1,35 @@
 [project]
-name = "ComfyUI"
-version = "0.36.0"
-readme = "README.md"
-license = { file = "LICENSE" }
-requires-python = ">=3.10"
+name = "ComfyUI-Krea2T-Enhancer"
+description = "Krea2 Turbo Enhancement Nodes"
+version = "1.3.0"
+license = {file = "LICENSE"} 
+# classifiers = [
+#     # For OS-independent nodes (works on all operating systems)
+#     "Operating System :: OS Independent",
+#
+#     # OR for OS-specific nodes, specify the supported systems:
+#     "Operating System :: Microsoft :: Windows",  # Windows specific
+#     "Operating System :: POSIX :: Linux",  # Linux specific
+#     "Operating System :: MacOS",  # macOS specific
+#
+#     # GPU Accelerator support. Pick the ones that are supported by your extension.
+#     "Environment :: GPU :: NVIDIA CUDA",    # NVIDIA CUDA support
+#     "Environment :: GPU :: AMD ROCm",       # AMD ROCm support
+#     "Environment :: GPU :: Intel Arc",      # Intel Arc support
+#     "Environment :: NPU :: Huawei Ascend",  # Huawei Ascend support
+#     "Environment :: GPU :: Apple Metal",    # Apple Metal support
+# ]
+
 
 [project.urls]
-homepage = "https://www.comfy.org/"
-repository = "https://github.com/comfyanonymous/ComfyUI"
-documentation = "https://docs.comfy.org/"
+Repository = "https://github.com/capitan01R/ComfyUI-Krea2T-Enhancer"
+#  Used by Comfy Registry https://registry.comfy.org
+Documentation = "https://github.com/capitan01R/ComfyUI-Krea2T-Enhancer/wiki"
+"Bug Tracker" = "https://github.com/capitan01R/ComfyUI-Krea2T-Enhancer/issues"
 
-[tool.ruff]
-lint.select = [
-  "N805", # invalid-first-argument-name-for-method
-  "S307", # suspicious-eval-usage
-  "S102", # exec
-  "E",
-  "T",    # print-usage
-  "W",
-  # The "F" series in Ruff stands for "Pyflakes" rules, which catch various Python syntax errors and undefined names.
-  # See all rules here: https://docs.astral.sh/ruff/rules/#pyflakes-f
-  "F",
-]
-
-lint.ignore = ["E501", "E722", "E731", "E712", "E402", "E741"]
-
-exclude = ["*.ipynb", "**/generated/*.pyi"]
-
-[tool.pylint]
-master.py-version = "3.10"
-master.extension-pkg-allow-list = [
-  "pydantic",
-]
-reports.output-format = "colorized"
-similarities.ignore-imports = "yes"
-messages_control.disable = [
-  "missing-module-docstring",
-  "missing-class-docstring",
-  "missing-function-docstring",
-  "line-too-long",
-  "too-few-public-methods",
-  "too-many-public-methods",
-  "too-many-instance-attributes",
-  "too-many-positional-arguments",
-  "broad-exception-raised",
-  "too-many-lines",
-  "invalid-name",
-  "unused-argument",
-  "broad-exception-caught",
-  "consider-using-with",
-  "fixme",
-  "too-many-statements",
-  "too-many-branches",
-  "too-many-locals",
-  "too-many-arguments",
-  "too-many-return-statements",
-  "too-many-nested-blocks",
-  "duplicate-code",
-  "abstract-method",
-  "superfluous-parens",
-  "arguments-differ",
-  "redefined-builtin",
-  "unnecessary-lambda",
-  "dangerous-default-value",
-  "invalid-overridden-method",
-  # next warnings should be fixed in future
-  "bad-classmethod-argument",  # Class method should have 'cls' as first argument
-  "wrong-import-order",  # Standard imports should be placed before third party imports
-  "ungrouped-imports",
-  "unnecessary-pass",
-  "unnecessary-lambda-assignment",
-  "no-else-return",
-  "unused-variable",
-]
+[tool.comfy]
+PublisherId = "capitan01r"
+DisplayName = "ComfyUI-Krea2T-Enhancer"
+Icon = ""
+includes = [] 
+# "requires-comfyui" = ">=1.0.0"  # ComfyUI version compatibility

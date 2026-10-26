@@ -1,437 +1,218 @@
-<div align="center">
+# ComfyUI-Krea2T-Enhancer
 
-# ComfyUI
-**The most powerful and modular AI engine for content creation.**
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow.svg)](https://buymeacoffee.com/capitan01r)
 
+Prompt-adherence enhancement for Krea2 diffusion models in ComfyUI.
 
-[![Website][website-shield]][website-url]
-[![Dynamic JSON Badge][discord-shield]][discord-url]
-[![Twitter][twitter-shield]][twitter-url]
-[![Matrix][matrix-shield]][matrix-url]
-<br>
-[![][github-release-shield]][github-release-link]
-[![][github-release-date-shield]][github-release-link]
-[![][github-downloads-shield]][github-downloads-link]
-[![][github-downloads-latest-shield]][github-downloads-link]
+This custom node patches the Krea2 text-fusion path during sampling and applies a controlled internal conditioning adjustment intended to improve how strongly the model follows prompt details.
 
-[matrix-shield]: https://img.shields.io/badge/Matrix-000000?style=flat&logo=matrix&logoColor=white
-[matrix-url]: https://app.element.io/#/room/%23comfyui_space%3Amatrix.org
-[website-shield]: https://img.shields.io/badge/ComfyOrg-4285F4?style=flat
-[website-url]: https://www.comfy.org/
-<!-- Workaround to display total user from https://github.com/badges/shields/issues/4500#issuecomment-2060079995 -->
-[discord-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2Fcomfyorg%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&logo=discord&logoColor=white&label=Discord&color=green&suffix=%20total
-[discord-url]: https://discord.com/invite/comfyorg
-[twitter-shield]: https://img.shields.io/twitter/follow/ComfyUI
-[twitter-url]: https://x.com/ComfyUI
+## Installation
 
-[github-release-shield]: https://img.shields.io/github/v/release/comfyanonymous/ComfyUI?style=flat&sort=semver
-[github-release-link]: https://github.com/comfyanonymous/ComfyUI/releases
-[github-release-date-shield]: https://img.shields.io/github/release-date/comfyanonymous/ComfyUI?style=flat
-[github-downloads-shield]: https://img.shields.io/github/downloads/comfyanonymous/ComfyUI/total?style=flat
-[github-downloads-latest-shield]: https://img.shields.io/github/downloads/comfyanonymous/ComfyUI/latest/total?style=flat&label=downloads%40latest
-[github-downloads-link]: https://github.com/comfyanonymous/ComfyUI/releases
-
-<img width="1590" height="795" alt="ComfyUI Screenshot" src="https://github.com/user-attachments/assets/36e065e0-bfae-4456-8c7f-8369d5ea48a2" />
-<br>
-</div>
-
-ComfyUI is the AI creation engine for visual professionals who demand control over every model, every parameter, and every output. Its powerful and modular node graph interface empowers creatives to generate images, videos, 3D models, audio, and more...
-- ComfyUI natively supports the latest open-source state of the art models.
-- [Partner nodes](https://docs.comfy.org/tutorials/partner-nodes/overview#partner-nodes) provide access to the best closed source models such as Nano Banana, Seedance, Hunyuan3D, etc.
-- It is available on Windows, Linux, and macOS, locally with our [desktop application](https://www.comfy.org/download), our [portable install](#installing) or on our [cloud](https://www.comfy.org/cloud).
-- The most sophisticated workflows can be exposed through a simple UI thanks to App Mode.
-- It integrates seamlessly into production pipelines with our API endpoints.
-
-## Get Started
-
-### Local
-
-#### [Desktop Application](https://www.comfy.org/download)
-- The easiest way to get started.
-- Available on Windows & macOS.
-
-#### [Manual Install](#manual-install-windows-linux)
-Supports all operating systems and GPU types (NVIDIA, AMD, Intel, Apple Silicon, Ascend).
-
-### Cloud
-
-#### [Comfy Cloud](https://www.comfy.org/cloud)
-- Our official paid cloud version for those who can't afford local hardware.
-
-## Examples
-See what ComfyUI can do with the [newer template workflows](https://comfy.org/workflows) or old [example workflows](https://comfyanonymous.github.io/ComfyUI_examples/).
-
-## Features
-- A visual node graph for building and reusing image, video, audio, 3D, and text workflows without code.
-- Reusable subgraphs, workflow templates, App Mode, and a local API for integrating workflows into applications.
-- Efficient local execution with asynchronous queueing, partial graph re-execution, smart VRAM and RAM management, model offloading, and support for quantized models.
-- Broad native model support. This is a representative list; browse the [workflow library](https://comfy.org/workflows/) for maintained, ready-to-run templates.
-  - [Image generation](https://comfy.org/workflows/tag/text-to-image/): Stable Diffusion 1.5, SDXL, SD3.5, Flux.1, Flux.2, Qwen Image, Z-Image, Hunyuan Image 2.1, HiDream, Lumina Image 2.0, Chroma, Anima, LongCat Image, Ideogram 4, Krea 2, MageFlow, Microsoft Lens, PixelDiT, Kandinsky 5, and Ernie Image.
-  - [Image editing](https://comfy.org/workflows/tag/image-edit/): Flux Kontext, Flux.2 Klein, Qwen Image Edit, HiDream E1.1 and O1, OmniGen2, Boogu, JoyImage Edit, MageFlow Edit, and LongCat Image Edit.
-  - [Video generation](https://comfy.org/workflows/tag/video-generation/): Wan 2.1 and 2.2, LTX-Video 2 and 2.3, HunyuanVideo 1.5, Kandinsky 5 Video, CogVideoX, Cosmos Predict2, Bernini-R, SCAIL 2, and Mochi.
-  - [Audio and video generation](https://comfy.org/workflows/): MiniMax H3 and LTX-AV.
-  - [Audio generation](https://comfy.org/workflows/tag/text-to-audio/): ACE-Step 1.5, Stable Audio 3, MiniMax Music 3 and Yue 2.
-  - [3D and vision](https://comfy.org/workflows/): Hunyuan3D 2.1, TripoSplat, SeedVR2, SUPIR, Depth Anything 3, MoGe, SAM 3 and 3.1, RT-DETRv4, and BiRefNet.
-  - [Text generation](https://comfy.org/workflows/tag/text-generation/): Gemma 3 and 4, Qwen3, Qwen3.5, and Qwen3-VL, including multimodal inputs.
-- Load complete checkpoints or separate diffusion models, VAEs, text encoders, LoRAs, ControlNets, adapters, and upscalers from supported model formats.
-- Built-in tools for inpainting, outpainting, reference conditioning, masks and compositing, model merging, upscaling, frame interpolation, segmentation, depth estimation, and media processing.
-- Save and load workflows as JSON, or recover complete workflows and seeds from supported generated media.
-- Runs fully offline: core does not download anything unless you request it. Use `--disable-api-nodes` to disable the optional paid [Comfy API nodes](https://docs.comfy.org/tutorials/api-nodes/overview) and force all built-in functionality to stay offline.
-- Extend ComfyUI with custom nodes
-- Configure additional model locations with [`extra_model_paths.yaml`](extra_model_paths.yaml.example).
-- Support for saving and loading high bit depth images and videos: 16 bit PNG images, 32 bit EXR, 10 bit AVIF are supported and more.
-- Support for saving and loading HDR videos and images in various formats.
-
-
-## Release Process
-
-ComfyUI follows a weekly release cycle targeting Monday but this regularly changes because of model releases or large changes to the codebase. There are three interconnected repositories:
-
-1. **[ComfyUI Core](https://github.com/comfyanonymous/ComfyUI)**
-   - Releases a new major stable version (e.g., v0.7.0) roughly every 2 weeks.
-   - Starting from v0.4.0 patch versions will be used for fixes backported onto the current stable release.
-   - Minor versions will be used for releases off the master branch.
-   - Patch versions may still be used for releases on the master branch in cases where a backport would not make sense.
-   - Commits outside of the stable release tags may be very unstable and break many custom nodes.
-   - Serves as the foundation for the desktop release
-
-2. **[Comfy Desktop](https://github.com/Comfy-Org/Comfy-Desktop)**
-   - Builds a new release using the latest stable core version
-
-3. **[ComfyUI Frontend](https://github.com/Comfy-Org/ComfyUI_frontend)**
-   - Every 2+ weeks frontend updates are merged into the core repository
-   - Features are frozen for the upcoming core release
-   - Development continues for the next release cycle
-
-## Shortcuts
-
-| Keybind                            | Explanation                                                                                                        |
-|------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| `Ctrl` + `Enter`                      | Queue up current graph for generation                                                                              |
-| `Ctrl` + `Shift` + `Enter`              | Queue up current graph as first for generation                                                                     |
-| `Ctrl` + `Alt` + `Enter`                | Cancel current generation                                                                                          |
-| `Ctrl` + `Z`/`Ctrl` + `Y`                 | Undo/Redo                                                                                                          |
-| `Ctrl` + `S`                          | Save workflow                                                                                                      |
-| `Ctrl` + `O`                          | Load workflow                                                                                                      |
-| `Ctrl` + `A`                          | Select all nodes                                                                                                   |
-| `Alt `+ `C`                           | Collapse/uncollapse selected nodes                                                                                 |
-| `Ctrl` + `M`                          | Mute/unmute selected nodes                                                                                         |
-| `Ctrl` + `B`                           | Bypass selected nodes (acts like the node was removed from the graph and the wires reconnected through)            |
-| `Delete`/`Backspace`                   | Delete selected nodes                                                                                              |
-| `Ctrl` + `Backspace`                   | Delete the current graph                                                                                           |
-| `Space`                              | Move the canvas around when held and moving the cursor                                                             |
-| `Ctrl`/`Shift` + `Click`                 | Add clicked node to selection                                                                                      |
-| `Ctrl` + `C`/`Ctrl` + `V`                  | Copy and paste selected nodes (without maintaining connections to outputs of unselected nodes)                     |
-| `Ctrl` + `C`/`Ctrl` + `Shift` + `V`          | Copy and paste selected nodes (maintaining connections from outputs of unselected nodes to inputs of pasted nodes) |
-| `Shift` + `Drag`                       | Move multiple selected nodes at the same time                                                                      |
-| `Ctrl` + `D`                           | Load default graph                                                                                                 |
-| `Alt` + `+`                          | Canvas Zoom in                                                                                                     |
-| `Alt` + `-`                          | Canvas Zoom out                                                                                                    |
-| `Ctrl` + `Shift` + LMB + Vertical drag | Canvas Zoom in/out                                                                                                 |
-| `P`                                  | Pin/Unpin selected nodes                                                                                           |
-| `Ctrl` + `G`                           | Group selected nodes                                                                                               |
-| `Q`                                 | Toggle visibility of the queue                                                                                     |
-| `H`                                  | Toggle visibility of history                                                                                       |
-| `R`                                  | Refresh graph                                                                                                      |
-| `F`                                  | Show/Hide menu                                                                                                      |
-| `.`                                  | Fit view to selection (Whole graph when nothing is selected)                                                        |
-| Double-Click LMB                   | Open node quick search palette                                                                                     |
-| `Shift` + Drag                       | Move multiple wires at once                                                                                        |
-| `Ctrl` + `Alt` + LMB                   | Disconnect all wires from clicked slot                                                                             |
-
-`Ctrl` can also be replaced with `Cmd` instead for macOS users
-
-# Installing
-
-## Windows and Mac
-
-We highly recommend using the [desktop app](https://comfy.org/download):
-
-### [Link to Download](https://comfy.org/download)
-
-The desktop app is the easiest and best way to use ComfyUI for new users.
-
-## Windows Portable
-
-There is a portable standalone build for Windows that should work for running on Nvidia GPUs or for running on your CPU only. It is not recommended for regular users. Regular users should use the desktop app above.
-
-[Direct link to download (nvidia)](https://github.com/comfyanonymous/ComfyUI/releases/latest/download/ComfyUI_windows_portable_nvidia.7z)
-
-Simply download, extract with [7-Zip](https://7-zip.org) or with the windows explorer on recent windows versions and run. For smaller models you normally only need to put the checkpoints (the huge ckpt/safetensors files) in: ComfyUI\models\checkpoints but many of the larger models have multiple files. Make sure to follow the instructions to know which subfolder to put them in ComfyUI\models\
-
-If you have trouble extracting it, right click the file -> properties -> unblock
-
-The portable above currently comes with python 3.13 and pytorch cuda 13.0. Update your Nvidia drivers if it doesn't start.
-
-#### All Official Portable Downloads:
-
-[Portable for AMD GPUs](https://github.com/comfyanonymous/ComfyUI/releases/latest/download/ComfyUI_windows_portable_amd.7z)
-
-[Portable for Intel GPUs](https://github.com/comfyanonymous/ComfyUI/releases/latest/download/ComfyUI_windows_portable_intel.7z)
-
-[Portable for Nvidia GPUs](https://github.com/comfyanonymous/ComfyUI/releases/latest/download/ComfyUI_windows_portable_nvidia.7z) (supports 20 series and above).
-
-[Portable for Nvidia GPUs with pytorch cuda 12.6 and python 3.12](https://github.com/comfyanonymous/ComfyUI/releases/latest/download/ComfyUI_windows_portable_nvidia_cu126.7z) (Supports Nvidia 10 series and older GPUs, DO NOT USE THIS ON NEWER 20 SERIES AND ABOVE GPUS).
-
-#### How do I share models between another UI and ComfyUI?
-
-See the [Config file](extra_model_paths.yaml.example) to set the search paths for models. In the standalone windows build you can find this file in the ComfyUI directory. Rename this file to extra_model_paths.yaml and edit it with your favorite text editor.
-
-
-## [comfy-cli](https://docs.comfy.org/comfy-cli/getting-started)
-
-You can install and start ComfyUI using comfy-cli:
 ```bash
-pip install comfy-cli
-comfy install
+cd ComfyUI/custom_nodes
+git clone https://github.com/capitan01R/ComfyUI-Krea2T-Enhancer.git
 ```
 
-## Manual Install (Windows, Linux)
+Restart ComfyUI after installing or updating.
 
-Python 3.14 works but some custom nodes may have issues. The free threaded variant works but some dependencies will enable the GIL so it's not fully supported.
+No extra Python packages are required beyond a working ComfyUI Krea2 setup.
 
-Python 3.13 is very well supported. If you have trouble with some custom node dependencies on 3.13 you can try 3.12
+## Included Nodes
 
-torch 2.7 is minimally supported but using a newer version is extremely recommended. Using a cu130 or above version of pytorch is required on Nvidia 20 series and above. Some features and optimizations might only work on newer versions. We generally recommend using the latest major version of pytorch with the latest cuda version unless it is less than 2 weeks old. If your pytorch is more than 6 months old, please update it.
+| Node | Output | Purpose |
+|---|---|---|
+| **ComfyUI-Krea2T-Enhancer** | `MODEL` | Patches the Krea2 model path to improve prompt adherence during sampling. |
+| **Krea2T Enhancer Advanced** | `MODEL` | Same enhancer path, plus a direct post-`txtmlp` `text_scale` control for fused text-token strength. |
+| **Krea2 Turbo Reference Sigmas (From Latent)** | `SIGMAS`, `LATENT` | Builds a Turbo sigma schedule based on the official Krea 2 Turbo scheduler settings and validates the connected latent dimensions. |
+| **Krea2 Text Encode — Attention-Weighted Phrases** | `MODEL`, `CONDITIONING`, `STRING` | Encodes weighted phrases and changes only the image-query-to-selected-text-key attention odds in Krea2's shared DiT blocks. |
 
-### Instructions:
+## Usage
 
-Git clone this repo.
+Place **ComfyUI-Krea2T-Enhancer** between your Krea2 diffusion model loader and sampler:
 
-Put your SD checkpoints (the huge ckpt/safetensors files) in: models/checkpoints
-
-Put your VAE in: models/vae
-
-
-### AMD GPUs (Linux)
-
-AMD users can install rocm and pytorch with pip if you don't have it already installed, this is the command to install the stable version:
-
-```pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.2```
-
-This is the command to install the nightly with ROCm 7.2 which might have some performance improvements:
-
-```pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm7.2```
-
-
-### AMD GPUs (Windows, ROCm 10.0)
-
-Use AMD's [multi-architecture PyTorch packages](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html). The `device-*` extras install your GPU's kernels and the matching ROCm runtime automatically; a separate HIP SDK installation is not needed.
-
-Use Windows 11, a current [AMD graphics driver](https://www.amd.com/en/support/download/drivers.html), and 64-bit Python 3.13.
-
-The install command below uses `device-all` to install kernels for all supported GPUs. To reduce download size and disk usage, optionally replace **both** occurrences of `device-all` with the target for your GPU:
-
-| GPU | Device extra |
-| --- | --- |
-| RX 9070 / XT, Radeon AI PRO R9700 | `device-gfx1201` |
-| RX 9060 / XT | `device-gfx1200` |
-| RX 7900 XT / XTX | `device-gfx1100` |
-| RX 7700 XT / 7800 XT | `device-gfx1101` |
-| RX 7600 / XT | `device-gfx1102` |
-| Ryzen AI Max / Max+ (Strix Halo) | `device-gfx1151` |
-
-**Note:** This table only lists examples. A GPU missing from it may still be supported: supported architectures include RDNA 2, RDNA 3, RDNA 3.5, and RDNA 4. Keep `device-all` to install kernels for all supported targets. For other models, see AMD's [GPU target table](https://github.com/ROCm/TheRock/blob/main/RELEASES.md#gfx-target-lookup-table) and [ROCm compatibility matrix](https://rocm.docs.amd.com/en/docs-10.0.0/compatibility/compatibility-matrix.html).
-
-**ROCm 10.0.0 with PyTorch 2.13:**
-
-```bat
-pip install --index-url https://stable.repo.amd.com/rocm/whl-next/ "torch[device-all]==2.13.0+rocm10.0.0" "torchvision[device-all]==0.28.0+rocm10.0.0" "torchaudio==2.11.0.2+rocm10.0.0"
+```text
+Load Diffusion Model -> ComfyUI-Krea2T-Enhancer -> KSampler
 ```
 
-### Intel GPUs (Windows and Linux)
-
-Intel Arc GPU users can install native PyTorch with torch.xpu support using pip. More information can be found [here](https://pytorch.org/docs/main/notes/get_start_xpu.html)
-
-1. To install PyTorch xpu, use the following command:
-
-```pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/xpu```
-
-This is the command to install the Pytorch xpu nightly which might have some performance improvements:
-
-```pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/xpu```
-
-### NVIDIA
-
-Nvidia users should install stable pytorch using this command:
-
-```pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu130```
-
-This is the command to install pytorch nightly instead which might have performance improvements.
-
-```pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu132```
-
-#### Troubleshooting
-
-If you get the "Torch not compiled with CUDA enabled" error, uninstall torch with:
-
-```pip uninstall torch```
-
-And install it again with the command above.
-
-### Dependencies
-
-Install the dependencies by opening your terminal inside the ComfyUI folder and:
-
-```pip install -r requirements.txt```
-
-After this you should have everything installed and can proceed to running ComfyUI.
-
-### Others:
-
-#### Apple Mac silicon
-
-You can install ComfyUI in Apple Mac silicon (M1, M2, M3 or M4) with any recent macOS version.
-
-1. Install pytorch nightly. For instructions, read the [Accelerated PyTorch training on Mac](https://developer.apple.com/metal/pytorch/) Apple Developer guide (make sure to install the latest pytorch nightly).
-1. Follow the [ComfyUI manual installation](#manual-install-windows-linux) instructions for Windows and Linux.
-1. Install the ComfyUI [dependencies](#dependencies). If you have another Stable Diffusion UI [you might be able to reuse the dependencies](#i-already-have-another-ui-for-stable-diffusion-installed-do-i-really-have-to-install-all-of-these-dependencies).
-1. Launch ComfyUI by running `python main.py`
-
-> **Note**: Remember to add your models, VAE, LoRAs etc. to the corresponding Comfy folders, as discussed in [ComfyUI manual installation](#manual-install-windows-linux).
-
-#### Ascend NPUs
-
-For models compatible with Ascend Extension for PyTorch (torch_npu). To get started, ensure your environment meets the prerequisites outlined on the [installation](https://ascend.github.io/docs/sources/ascend/quick_install.html) page. Here's a step-by-step guide tailored to your platform and installation method:
-
-1. Begin by installing the recommended or newer kernel version for Linux as specified in the Installation page of torch-npu, if necessary.
-2. Proceed with the installation of Ascend Basekit, which includes the driver, firmware, and CANN, following the instructions provided for your specific platform.
-3. Next, install the necessary packages for torch-npu by adhering to the platform-specific instructions on the [Installation](https://ascend.github.io/docs/sources/pytorch/install.html#pytorch) page.
-4. Finally, adhere to the [ComfyUI manual installation](#manual-install-windows-linux) guide for Linux. Once all components are installed, you can run ComfyUI as described earlier.
-
-#### Cambricon MLUs
-
-For models compatible with Cambricon Extension for PyTorch (torch_mlu). Here's a step-by-step guide tailored to your platform and installation method:
-
-1. Install the Cambricon CNToolkit by adhering to the platform-specific instructions on the [Installation](https://www.cambricon.com/docs/sdk_1.15.0/cntoolkit_3.7.2/cntoolkit_install_3.7.2/index.html)
-2. Next, install the PyTorch(torch_mlu) following the instructions on the [Installation](https://www.cambricon.com/docs/sdk_1.15.0/cambricon_pytorch_1.17.0/user_guide_1.9/index.html)
-3. Launch ComfyUI by running `python main.py`
-
-#### Iluvatar Corex
-
-For models compatible with Iluvatar Extension for PyTorch. Here's a step-by-step guide tailored to your platform and installation method:
-
-1. Install the Iluvatar Corex Toolkit by adhering to the platform-specific instructions on the [Installation](https://support.iluvatar.com/#/DocumentCentre?id=1&nameCenter=2&productId=520117912052801536)
-2. Launch ComfyUI by running `python main.py`
-
-
-## [ComfyUI-Manager](https://github.com/Comfy-Org/ComfyUI-Manager/tree/manager-v4)
-
-**ComfyUI-Manager** is an extension that allows you to easily install, update, and manage custom nodes for ComfyUI.
-
-### Setup
-
-1. Install the manager dependencies:
-   ```bash
-   pip install -r manager_requirements.txt
-   ```
-
-2. Enable the manager with the `--enable-manager` flag when running ComfyUI:
-   ```bash
-   python main.py --enable-manager
-   ```
-
-### Command Line Options
-
-| Flag | Description |
-|------|-------------|
-| `--enable-manager` | Enable ComfyUI-Manager |
-| `--enable-manager-legacy-ui` | Use the legacy manager UI instead of the new UI (implies `--enable-manager`) |
-| `--disable-manager-ui` | Disable the manager UI and endpoints while keeping background features like security checks and scheduled installation completion (requires `--enable-manager`) |
-
-
-# Running
-
-```python main.py```
-
-### For AMD cards not officially supported by ROCm
-
-Try running it with this command if you have issues:
-
-For 6700, 6600 and maybe other RDNA2 or older: ```HSA_OVERRIDE_GFX_VERSION=10.3.0 python main.py```
-
-For AMD 7600 and maybe other RDNA3 cards: ```HSA_OVERRIDE_GFX_VERSION=11.0.0 python main.py```
-
-### AMD ROCm Tips
-
-You can try setting this env variable `PYTORCH_TUNABLEOP_ENABLED=1` which might speed things up at the cost of a very slow initial run.
-
-# Notes
-
-Only parts of the graph that have an output with all the correct inputs will be executed.
-
-Only parts of the graph that change from each execution to the next will be executed, if you submit the same graph twice only the first will be executed. If you change the last part of the graph only the part you changed and the part that depends on it will be executed.
-
-Dragging a generated png on the webpage or loading one will give you the full workflow including seeds that were used to create it.
-
-You can use () to change emphasis of a word or phrase like: (good code:1.2) or (bad code:0.8). The default emphasis for () is 1.1. To use () characters in your actual prompt escape them like \\( or \\).
-
-You can use {day|night}, for wildcard/dynamic prompts. With this syntax "{wild|card|test}" will be randomly replaced by either "wild", "card" or "test" by the frontend every time you queue the prompt. To use {} characters in your actual prompt escape them like: \\{ or \\}.
-
-Dynamic prompts also support C-style comments, like `// comment` or `/* comment */`.
-
-To use a textual inversion concepts/embeddings in a text prompt put them in the models/embeddings directory and use them in the CLIPTextEncode node like this (you can omit the .pt extension):
-
-```embedding:embedding_filename.pt```
-
-
-## How to show high-quality previews?
-
-Use ```--preview-method auto``` to enable previews.
-
-The default installation includes a fast latent preview method that's low-resolution. To enable higher-quality previews with [TAESD](https://github.com/madebyollin/taesd), download the [taesd_decoder.pth, taesdxl_decoder.pth, taesd3_decoder.pth and taef1_decoder.pth](https://github.com/madebyollin/taesd/) and place them in the `models/vae_approx` folder. Once they're installed, restart ComfyUI and launch it with `--preview-method taesd` to enable high-quality previews.
-
-## How to use TLS/SSL?
-Generate a self-signed certificate (not appropriate for shared/production use) and key by running the command: `openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=StateName/L=CityName/O=CompanyName/OU=CompanySectionName/CN=CommonNameOrHostname"`
-
-Use `--tls-keyfile key.pem --tls-certfile cert.pem` to enable TLS/SSL, the app will now be accessible with `https://...` instead of `http://...`.
-
-> Note: Windows users can use [alexisrolland/docker-openssl](https://github.com/alexisrolland/docker-openssl) or one of the [3rd party binary distributions](https://wiki.openssl.org/index.php/Binaries) to run the command example above.
-<br/><br/>If you use a container, note that the volume mount `-v` can be a relative path so `... -v ".\:/openssl-certs" ...` would create the key & cert files in the current directory of your command prompt or powershell terminal.
-
-## Support and dev channel
-
-[Discord](https://comfy.org/discord): Try the #help or #feedback channels.
-
-[Matrix space: #comfyui_space:matrix.org](https://app.element.io/#/room/%23comfyui_space%3Amatrix.org) (it's like discord but open source).
-
-See also: [https://www.comfy.org/](https://www.comfy.org/)
-
-> _psst — we're hiring!_ Help build ComfyUI: [comfy.org/careers](https://www.comfy.org/careers)
-
-## Frontend Development
-
-As of August 15, 2024, we have transitioned to a new frontend, which is now hosted in a separate repository: [ComfyUI Frontend](https://github.com/Comfy-Org/ComfyUI_frontend). The compiled JS files (from TS/Vue) are published to [pypi](https://pypi.org/project/comfyui-frontend-package) and installed as a dependency in ComfyUI.
-
-### Reporting Issues and Requesting Features
-
-For any bugs, issues, or feature requests related to the frontend, please use the [ComfyUI Frontend repository](https://github.com/Comfy-Org/ComfyUI_frontend). This will help us manage and address frontend-specific concerns more efficiently.
-
-### Using the Latest Frontend
-
-The new frontend is now the default for ComfyUI. However, please note:
-
-1. The frontend in the main ComfyUI repository is updated fortnightly.
-2. Daily releases are available in the separate frontend repository.
-
-To use the most up-to-date frontend version:
-
-1. For the latest daily release, launch ComfyUI with this command line argument:
-
-   ```
-   --front-end-version Comfy-Org/ComfyUI_frontend@latest
-   ```
-
-2. For a specific version, replace `latest` with the desired version number:
-
-   ```
-   --front-end-version Comfy-Org/ComfyUI_frontend@1.2.2
-   ```
-
-This approach allows you to easily switch between the stable fortnightly release and the cutting-edge daily updates, or even specific versions for testing purposes.
-
-# QA
-
-### Which GPU should I buy for this?
-
-[See this page for some recommendations](https://github.com/comfyanonymous/ComfyUI/wiki/Which-GPU-should-I-buy-for-ComfyUI)
+Or use **Krea2T Enhancer Advanced** when you want the additional text-scale control:
+
+```text
+Load Diffusion Model -> Krea2T Enhancer Advanced -> KSampler
+```
+
+Use your normal Krea2 text encoder, VAE, latent, and sampler setup.
+
+For the sigma scheduler, connect both the loaded Krea2 Turbo model and the same
+Empty Latent Image that will be sent to the sampler:
+
+```text
+Load Diffusion Model --\
+                        > Krea2 Turbo Reference Sigmas (From Latent) -> SIGMAS to sampler
+Empty Latent Image ----/                                             -> LATENT to sampler
+```
+
+For attention-weighted phrases, connect the final model after all LoRA loaders
+and the Krea2 CLIP to the node. Both primary outputs must be used:
+
+```text
+Load Diffusion Model -> LoRA loader(s) -> Krea2 Text Encode — Attention-Weighted Phrases -> MODEL to sampler
+Krea2 CLIP ---------------------------> Krea2 Text Encode — Attention-Weighted Phrases -> CONDITIONING to positive
+```
+
+Write a weighted section as `(phrase:weight)`. The annotation is removed before
+tokenization, while the phrase and its original Qwen token positions remain.
+`1.0` is an exact no-op, values above `1.0` increase the phrase's attention odds,
+values between `0.0` and `1.0` reduce them, and `0.0` suppresses them.
+
+## Controls
+
+### ComfyUI-Krea2T-Enhancer
+
+| Parameter | Default | Meaning |
+|---|---:|---|
+| `enabled` | `true` | Turns the patch on or off. |
+| `strength` | `1.0` | Blends the enhancement from neutral `0.0` to full `2.0`. |
+| `debug` | `false` | Prints concise runtime diagnostics to the ComfyUI console. |
+
+### Krea2T Enhancer Advanced
+
+| Parameter | Default | Meaning |
+|---|---:|---|
+| `enabled` | `true` | Turns the patch on or off. |
+| `strength` | `1.0` | Same enhancer strength as the original node, from neutral `0.0` to full `2.0`. |
+| `text_scale` | `1.0` | Multiplies fused text tokens immediately after `txtmlp`, before they enter the shared Krea2 stream. |
+| `debug` | `false` | Prints concise runtime diagnostics to the ComfyUI console. |
+
+Suggested starting range for `text_scale` is `1.50` to `2.00`. The neutral value is `1.0`.
+
+### Krea2 Turbo Reference Sigmas (From Latent)
+
+| Parameter | Default | Meaning |
+|---|---:|---|
+| `model` | — | The loaded Krea2 Turbo diffusion model. |
+| `latent` | — | The same latent used for sampling; it is validated and passed through unchanged. |
+| `steps` | `8` | Number of Euler denoising steps. The reference Turbo setup uses eight. |
+| `denoise` | `1.0` | Uses the complete schedule at `1.0`; lower values retain the final requested steps from a longer schedule. |
+
+### Krea2 Text Encode — Attention-Weighted Phrases
+
+| Parameter | Meaning |
+|---|---|
+| `model` | The final Krea2 model chain that will be sent to the sampler, including any LoRAs. |
+| `clip` | A text encoder loaded with the Krea2 CLIP type. |
+| `text` | Literal prompt text with optional `(phrase:weight)` sections. |
+
+#### Why this node exists
+
+Krea2 does not consume a conventional single-layer CLIP embedding. Its text
+encoder supplies twelve selected Qwen hidden-state taps, producing a
+`12 x 2560` representation for every text-token position. Krea2 then processes
+that stack through its internal text-fusion path before the text and image
+tokens enter the shared DiT blocks.
+
+Conventional prompt-emphasis methods usually multiply a completed conditioning
+row or repeat a token. Those operations do not map cleanly onto this pipeline:
+uniform row scaling can be reduced by later normalization, while repetition
+changes sequence length and can make one term overwhelm the relationships in a
+long prompt.
+
+This node keeps the original prompt sequence intact. It encodes the clean text
+normally, locates every Qwen token row belonging to each weighted phrase, and
+changes how strongly image queries attend to those selected text keys inside
+Krea2's shared DiT attention. It does not copy, delete, average, or rescale the
+conditioning rows.
+
+For a phrase weight `w`, the node adds `log(w)` to the selected image-to-text
+attention logits. After softmax, this multiplies the selected phrase's attention
+odds by `w` relative to their original values. A weight is therefore an
+attention-priority control, not a promise that an object will become a literal
+multiple larger, more frequent, or more visible in the final image.
+
+#### Why it has both MODEL and CLIP inputs
+
+The CLIP input is used to tokenize and encode the annotation-free prompt into
+the normal Krea2 twelve-tap conditioning tensor. The MODEL input is used to
+apply the matching attention-odds operation to the exact text-row positions
+identified during that encoding. This is why the node produces a paired MODEL
+and CONDITIONING result rather than acting as only a text encoder or only a
+model patch.
+
+Connect the completed model chain after all desired LoRA loaders to `model`.
+Connect the Krea2 text encoder to `clip`. Send the node's MODEL output to the
+sampler and its CONDITIONING output to the sampler's positive-conditioning
+path. The same prompt supplies both outputs, keeping the phrase-to-row mapping
+aligned with the model-side attention operation.
+
+#### Phrase syntax
+
+Use parentheses around any complete word or multi-word phrase followed by a
+colon and a non-negative numeric weight:
+
+```text
+A scene containing a (primary subject:2.0) beside a (secondary object:0.6)
+```
+
+The node removes only the surrounding weight annotation before tokenization.
+The words, spaces, tokenizer pieces, token order, and token count remain those
+of the clean prompt. If a phrase becomes several Qwen tokenizer pieces, the
+same weight is assigned to every piece belonging to that phrase.
+
+Weighted sections must not overlap or contain another weighted section. More
+than one separate phrase can be weighted in the same prompt.
+
+#### Weight behavior
+
+| Weight | Effect |
+|---:|---|
+| `1.0` | Exact neutral value. The phrase receives its original attention odds. |
+| Above `1.0` | Gives the phrase more attention priority. |
+| Between `0.0` and `1.0` | Reduces the phrase's attention priority. |
+| `0.0` | Applies the node's strongest suppression to the selected phrase keys. |
+
+Weights are relative odds multipliers. For example, `2.0` gives the selected
+keys twice their original odds before softmax renormalizes all available keys;
+it does not guarantee twice the visible effect. Very large weights can cause a
+phrase to compete too strongly with composition, spatial relationships, or
+other requested details.
+
+#### Practical usage guide
+
+1. Build and test the complete Krea2 workflow first, including the LoRAs and
+   sampler settings you intend to use.
+2. Keep the seed, resolution, sigmas, sampler, prompt, and LoRA strengths fixed
+   while evaluating a phrase weight.
+3. Start with the ordinary unannotated prompt or annotate the phrase with
+   `1.0` to establish the neutral result.
+4. Add weight only to the exact phrase that needs more or less priority. Include
+   the complete relationship when the relationship matters instead of weighting
+   only one isolated noun.
+5. Begin with a moderate increase such as `1.5` or `2.0`. Raise it in deliberate
+   increments if the phrase still receives insufficient attention. Use values
+   below `1.0` when a phrase is dominating the result.
+6. If several prompt sections need adjustment, tune one phrase at a time before
+   combining the weights. This makes composition changes attributable to a
+   specific phrase instead of several simultaneous changes.
+7. Recheck the result across additional seeds only after finding a useful range
+   on the fixed comparison seed. Phrase weighting changes attention allocation,
+   so its visible strength can vary with the generated composition.
+
+The `STRING` output is an inspection report. It records the clean text, every
+weighted phrase, its numeric weight, and the exact Qwen token rows, token IDs,
+and decoded pieces selected for that phrase. It can be connected to a text
+preview node when the precise tokenizer mapping needs to be verified; it is not
+required by the sampler.
+
+This node is specifically validated for text-only Krea2 conditioning with the
+`12 x 2560` layout. It rejects a mismatched text encoder, visual or custom
+embedding tokens, changed token counts, and a MODEL that does not expose the
+expected Krea2 text-fusion and shared-block architecture instead of silently
+applying an uncertain mapping.
+
+## Notes
+
+- Designed for Krea2 models using the `12 x 2560` Krea2 text-conditioning layout.
+- The original and advanced enhancer nodes return only a patched `MODEL`; they do not modify prompt text or require extra conditioning nodes.
+- The attention-weighted phrase node must supply both the sampler's `MODEL` and positive `CONDITIONING` paths. It never copies, deletes, averages, or scales conditioning rows.
+- If the loaded model does not match the expected Krea2 text-fusion layout, the patch is skipped.
+- The advanced node restores every temporary runtime patch after each model call and does not store debug counters or step-local state in the model config. With the same seed and the same node parameters, ComfyUI can reuse cached graph results normally.
+- The reference sigma node uses the Turbo fixed timestep shift `mu=1.15`, based on the official Krea 2 Turbo scheduler settings. It validates that the connected image dimensions are divisible by 16. Turbo does not use the RAW checkpoint's resolution-dependent shift rule.
